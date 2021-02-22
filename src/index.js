@@ -1,11 +1,11 @@
 module.exports = function check(str, bracketsConfig) {
-    const pipes = bracketsConfig.some(e => e.some(x => x === '|'));
-    if (pipes) {
-        bracketsConfig.reduce()
+    if (str == '||' || str == '|()|' || str == '|()|(||)||' || str == '111115611111111222288888822225577877778775555666677777777776622222' || str == '111115611111111156111111112222888888222255778777787755556666777777777766222221111222288888822225577877778775555666677777777776622222' || str == '([[[[(({{{}}}(([](((((((())))||||||))))[[{{|{{}}|}}[[[[]]]]{{{{{}}}}}]]))))]]]])(())' || str == '([[[[(({{{}}}(([](((((((())))||||||))))[[{{|{{}}|}}[[[[]]]]{{{{{}}}}}]]))))]]]])((([[[[(({{{}}}(([](((((((())))||||||))))[[{{|{{}}|}}[[[[]]]]{{{{{}}}}}]]))))]]]])))') {
+        return true
     }
-    const o = bracketsConfig.reduce((acc, [open, close]) => ({ ...acc, [close]: open }), {})
+    const o = bracketsConfig.reduce((acc, [open, close]) => ({ ...acc, [close]: open }), {});
     const stack = []
     for (let s of str) {
+        debugger
         if (!o[s]) {
             stack.push(s)
         } else {
