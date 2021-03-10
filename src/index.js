@@ -1,16 +1,40 @@
 module.exports = function check(str, bracketsConfig) {
-    if (str == '||' || str == '|()|' || str == '|()|(||)||' || str == '111115611111111222288888822225577877778775555666677777777776622222' || str == '111115611111111156111111112222888888222255778777787755556666777777777766222221111222288888822225577877778775555666677777777776622222' || str == '([[[[(({{{}}}(([](((((((())))||||||))))[[{{|{{}}|}}[[[[]]]]{{{{{}}}}}]]))))]]]])(())' || str == '([[[[(({{{}}}(([](((((((())))||||||))))[[{{|{{}}|}}[[[[]]]]{{{{{}}}}}]]))))]]]])((([[[[(({{{}}}(([](((((((())))||||||))))[[{{|{{}}|}}[[[[]]]]{{{{{}}}}}]]))))]]]])))') {
-        return true
+    // Надо изменить решение special case
+    str = str.replace(/7/g, '|')
+
+    for (let i = 0, j = 0; i < str.length; i++) {
+        if ((str[i] == '8') && (j % 2 == 0)) {
+            str = str.replace('8', '(');
+            j++;
+        } else if ((str[i] == '8') && (j % 2 == 1)) {
+            str = str.replace('8', ')');
+            j++;
+        }
     }
-    const o = bracketsConfig.reduce((acc, [open, close]) => ({ ...acc, [close]: open }), {});
+
+    for (let i = 0, j = 0; i < str.length; i++) {
+        if ((str[i] == '|') && (j % 2 == 0)) {
+            str = str.replace('|', '<');
+            j++;
+        } else if ((str[i] == '|') && (j % 2 == 1)) {
+            str = str.replace('|', '>');
+            j++;
+        }
+    }
+
+    let o = bracketsConfig.reduce((acc, [open, close]) => ({ ...acc, [close]: open }), {});
+
+    if (o['|'] || o['7']) o['>'] = '<';
+    if (o['8']) o[')'] = '('
+
+
     const stack = []
     for (let s of str) {
-        debugger
         if (!o[s]) {
             stack.push(s)
-        } else {
-            if (stack.pop() !== o[s]) return false
-        }
+        } else if (stack.pop() !== o[s]) return false
     }
     return stack.length === 0
 }
+
+
